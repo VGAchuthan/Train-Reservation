@@ -96,6 +96,8 @@ public class TrainReservationApplication {
             case 2:{
                 System.out.println("Enter PNR number to Cancel Booking");
                 int pnrNumber = sc.nextInt();
+                Reservation cancelReservation = new Reservation();
+                int CancelResult = cancelReservation.cancelBooking(pnrNumber);
                 int deleteStatus = handler.cancelTickets(pnrNumber);
                 if(deleteStatus != 0){
                     System.out.println("Cancel Successfully");

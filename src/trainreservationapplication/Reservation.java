@@ -74,6 +74,9 @@ public class Reservation {
             train.seats[seat] = 0;
             train.seatToPassengerMap.remove(seat);
          });
+            System.out.println("DElete afetr");
+            System.out.println(train.seats);
+            
             result = 1;
         }
         catch(Exception e){
