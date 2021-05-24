@@ -6,6 +6,7 @@
 package trainreservationapplication;
 //import contactapplication;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,23 +16,23 @@ import java.util.HashMap;
  * @author User
  */
 interface ReservationHandlerMessenger{
-    int bookTickets(int day,Train train,ArrayList<Person> passengerList, ArrayList<String> routes,float fare);
+    int bookTickets(LocalDate day,Train train,ArrayList<Person> passengerList, ArrayList<String> routes,float fare);
     int cancelTickets(int pnrNumber);
 }
 public class ReservationHandler implements ReservationHandlerMessenger{
     DBHandlerMessenger handler = new DBHandler();
     @Override
-    public int bookTickets(int day,Train train,ArrayList<Person> passengerList, ArrayList<String> routes,float fare) {
+    public int bookTickets(LocalDate date,Train train,ArrayList<Person> passengerList, ArrayList<String> routes,float fare) {
         
         ArrayList<Integer> allocatedSeat = new ArrayList<>();
         allocatedSeat = this.setSeats(train.seats,train,passengerList);
         System.out.println(allocatedSeat);
-        Reservation reserve = new Reservation(passengerList.size(),passengerList, allocatedSeat, train.trainNumber,routes.get(0), routes.get(1),fare);
-        System.out.println(Reservation.reserveId);
-        System.out.println(reserve);
+        Reservation reserve = new Reservation(passengerList.size(),passengerList, allocatedSeat, train.trainNumber,routes.get(0), routes.get(1),fare,date.toString());
+        //System.out.println(Reservation.reserveId);
+        //System.out.println(reserve);
         int p_result = writePassengerValues(reserve.tNum, reserve.PNRnumber,passengerList,allocatedSeat);
-        System.out.println("Pass res"+p_result);
-        int r_result = writeReservationValues(reserve.PNRnumber,reserve.tNum,passengerList.size(), routes, fare);
+        //System.out.println("Pass res"+p_result);
+        int r_result = writeReservationValues(reserve.PNRnumber,reserve.tNum,passengerList.size(), routes, fare, date.toString());
         
         train.setAvailableSeats(train.getAvailableSeats() - passengerList.size());
         
@@ -101,10 +102,10 @@ public class ReservationHandler implements ReservationHandlerMessenger{
         return 0;
     }
     
-    private int writeReservationValues(int pnrnumber, int trainnumber, int passengersSize,ArrayList<String> route, float fare){
+    private int writeReservationValues(int pnrnumber, int trainnumber, int passengersSize,ArrayList<String> route, float fare, String date){
         
         try{
-            return this.handler.addToReservationTable(pnrnumber,  trainnumber,  passengersSize,route, fare);
+            return this.handler.addToReservationTable(pnrnumber,  trainnumber,  passengersSize,route, fare, date);
         }
         catch(Exception e){
             e.printStackTrace();

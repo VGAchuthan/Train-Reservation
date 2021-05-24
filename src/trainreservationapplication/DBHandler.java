@@ -15,7 +15,7 @@ import java.util.HashMap;
  */
 interface DBHandlerMessenger{
     int addToPassengersTable(int trainnumber, int pnrnumber,ArrayList<Person> passengers, ArrayList<Integer> seats)throws Exception;
-    int addToReservationTable(int pnrnumber, int trainnumber, int passengersSize, ArrayList<String> routes, float fare);
+    int addToReservationTable(int pnrnumber, int trainnumber, int passengersSize, ArrayList<String> routes, float fare, String date);
     int deleteFromTable(int pnrNumber) throws Exception;
     
 }
@@ -70,7 +70,7 @@ public class DBHandler implements DBHandlerMessenger {
     }
 
     @Override
-    public int addToReservationTable(int pnrnumber, int trainnumber, int passengersSize, ArrayList<String> routes, float fare) {
+    public int addToReservationTable(int pnrnumber, int trainnumber, int passengersSize, ArrayList<String> routes, float fare,String date) {
         HashMap<String, String> writeValues = new HashMap<>();
         int result =0;
         try{
@@ -80,6 +80,7 @@ public class DBHandler implements DBHandlerMessenger {
         writeValues.put("start", routes.get(0));
         writeValues.put("destination", routes.get(1));
         writeValues.put("fare", Float.toString(fare));
+        writeValues.put("date", date);
         
         return this.sqlHandler.write("train.reservation", writeValues, con);
         }

@@ -6,8 +6,11 @@
 package trainreservationapplication;
 
 import java.sql.Connection;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
 
@@ -53,10 +56,11 @@ public class TrainReservationApplication {
             case 1:{
                 //Date date = new Date();
                 
-                Date selectedDate = selectDate();
-                System.out.println("Selected date"+selectedDate);
+                LocalDate selectedDate = selectDate();
+                //System.out.println(LocalDate.parse(selectedDate.toString()));
+                System.out.println("Selected date "+ selectedDate.getDayOfMonth());
                 int trainNumber = getTrainNumber();
-                Train train = TrainSchedule.getTrain(selectedDate.getDate(), trainNumber);
+                Train train = TrainSchedule.getTrain(selectedDate, trainNumber);
                 System.out.println(train);
                 System.out.println("Selected Train"+trainNumber);
                 ArrayList<String> routes = getSourceAndDestionation(train); 
@@ -79,7 +83,7 @@ public class TrainReservationApplication {
                 }
                 float fare = calculateFare(routes,train.stoppings) * passengerCount;
                 System.out.println("fare : "+fare);
-                int status = handler.bookTickets(selectedDate.getDate(),train,listOfPassengers, routes, fare);
+                int status = handler.bookTickets(selectedDate,train,listOfPassengers, routes, fare);
                 if(status == 1){
                     System.out.println("Booked Successfully");
                 }
@@ -104,10 +108,10 @@ public class TrainReservationApplication {
             }
             case 3:
             {
-                Date queryDate = selectDate();
+                LocalDate queryDate = selectDate();
                 int querytrainNumber = getTrainNumber();
-                System.out.println(queryDate.getDate() + " " +querytrainNumber);
-                TrainSchedule.getTrain(queryDate.getDate(), querytrainNumber).printAllSeatDetails();
+                System.out.println(queryDate + " " +querytrainNumber);
+                TrainSchedule.getTrain(queryDate, querytrainNumber).printAllSeatDetails();
                 
                 break;
             }
@@ -151,19 +155,25 @@ public class TrainReservationApplication {
         return 0;        
     }
     
-    private static Date selectDate(){
-        ArrayList<Date> listOfDate = new ArrayList<>();
+    private static LocalDate selectDate(){
+        ArrayList<LocalDate> listOfDate = new ArrayList<>();
         System.out.println("Select  Date");
-        Date date = new Date();
-        int today = date.getDate();
-        int month = date.getMonth();
+        //Date date = new Date();
+        //Calendar c = new GregorianCalendar();
+        Calendar c = Calendar.getInstance();
+        //Calendar.//c.
+        LocalDate localDate = LocalDate.now();
+        //LocalDate time = new LocalDate();
+        System.out.println("Local date:"+localDate);
+        //int today = date.getDate();
+        //int month = date.getMonth();
         //int index;
         for(int day = 0; day<3;day++){
-            Long seconds = date.getTime()+(day*24*60*60*1000);
-            Date tempDate = new Date(seconds);
+           // Long seconds = date.getTime()+(day*24*60*60*1000);
+            LocalDate tempDate = localDate.plusDays(day);
             //System.out.println(tempDate);
             listOfDate.add(tempDate);
-            System.out.print(tempDate.getDate()+" "+tempDate.getMonth()+"\t");
+            System.out.print(day+1+". "+tempDate+"\t");
             
         }
         
@@ -186,7 +196,7 @@ public class TrainReservationApplication {
             }
         }
         
-        return date;
+        return localDate;
     }
     private static ArrayList<String> getSourceAndDestionation(Train train){
         ArrayList<String> route = new ArrayList<String>();

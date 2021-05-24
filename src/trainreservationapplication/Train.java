@@ -5,6 +5,7 @@
  */
 package trainreservationapplication;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,24 +15,27 @@ import java.util.HashMap;
  * @author User
  */
 class TrainSchedule{
-    private static HashMap<Integer, HashMap<Integer, Train>> trainSchedule = new HashMap<Integer, HashMap<Integer, Train>>();
+    private static HashMap<LocalDate, HashMap<Integer, Train>> trainSchedule = new HashMap<LocalDate, HashMap<Integer, Train>>();
     public TrainSchedule(){
-        Date date = new Date();
-        int today = date.getDate();
+        //Date date = new Date();
+        //int today = date.getDate();
+        LocalDate today = LocalDate.now();
         
         for(int day = 0; day< 3;day++){
-            Long seconds = date.getTime()+(day*24*60*60*1000);
+           // Long seconds = date.getTime()+(day*24*60*60*1000);
             //date.
-            Date tmr = new Date(seconds);
+            
+            LocalDate tempDate = today.plusDays(day);
+            //Date tmr = new Date(seconds);
             //System.out.println(tmr);
-            TrainSchedule.trainSchedule.put(tmr.getDate(), new TrainList().getTrainList());
+            TrainSchedule.trainSchedule.put(tempDate, new TrainList().getTrainList());
            // System.out.println(TrainSchedule.trainSchedule.get(tmr));
         }
         //System.out.println(date.getDate());
         
         
     }
-    public static Train getTrain(int date, int trainNumber){
+    public static Train getTrain(LocalDate date, int trainNumber){
         return TrainSchedule.trainSchedule.get(date).get(trainNumber);
             
 
