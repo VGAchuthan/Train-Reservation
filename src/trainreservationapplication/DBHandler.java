@@ -17,6 +17,7 @@ interface DBHandlerMessenger{
     int addToPassengersTable(int trainnumber, int pnrnumber,ArrayList<Person> passengers, ArrayList<Integer> seats)throws Exception;
     int addToReservationTable(int pnrnumber, int trainnumber, int passengersSize, ArrayList<String> routes, float fare, String date);
     int deleteFromTable(int pnrNumber) throws Exception;
+    int addToTransactionTable(Transaction transactions);
     
 }
 public class DBHandler implements DBHandlerMessenger {
@@ -57,6 +58,7 @@ public class DBHandler implements DBHandlerMessenger {
         try{
             int result1 =this.sqlHandler.deleteFromTable("train.reservation", whereValues,con);
             int result2 =this.sqlHandler.deleteFromTable("train.passegers", whereValues, con);
+            int result3 = this.sqlHandler.deleteFromTable("train.transactions", whereValues, con);
             if(result1 != 0 && result2 != 0){
                 return 1;
             }
@@ -90,6 +92,27 @@ public class DBHandler implements DBHandlerMessenger {
         return 0;
 
     }
+
+    @Override
+    public int addToTransactionTable(Transaction transactions) {
+        HashMap<String, String> writeValues = new HashMap<>();
+        int result =0;
+        try{
+        writeValues.put("card_number", transactions.getCardNumber());
+        writeValues.put("mobile_number", transactions.getMobileNumber());
+        writeValues.put("pnr_number", Integer.toString(transactions.getPNRnumber()));
+        writeValues.put("amount", Float.toString(transactions.getAmount()));
+        
+        
+        return this.sqlHandler.write("train.transactions", writeValues, con);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    
+    }
+    
     
     
     

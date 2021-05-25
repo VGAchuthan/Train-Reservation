@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Scanner;
 
 /**
  *
@@ -28,15 +29,18 @@ public class ReservationHandler implements ReservationHandlerMessenger{
         allocatedSeat = this.setSeats(train.seats,train,passengerList);
         System.out.println(allocatedSeat);
         Reservation reserve = new Reservation(passengerList.size(),passengerList, allocatedSeat, train.trainNumber,routes.get(0), routes.get(1),fare,date.toString());
+        Transaction transactions = paymentDetails(reserve.PNRnumber, reserve.fare);
+        reserve.setTransaction(transactions);
         //System.out.println(Reservation.reserveId);
         //System.out.println(reserve);
         int p_result = writePassengerValues(reserve.tNum, reserve.PNRnumber,passengerList,allocatedSeat);
         //System.out.println("Pass res"+p_result);
         int r_result = writeReservationValues(reserve.PNRnumber,reserve.tNum,passengerList.size(), routes, fare, date.toString());
-        
+        int t_result = writeTransactionValues(transactions);
+        //handler.addToTransactionTable(transactions);
         train.setAvailableSeats(train.getAvailableSeats() - passengerList.size());
         
-        System.out.println(train.availableSeats);
+        //System.out.println(train.availableSeats);
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         
         return 1;//p_result && r_result;
@@ -45,6 +49,11 @@ public class ReservationHandler implements ReservationHandlerMessenger{
     @Override
     public int cancelTickets(int pnrNumber) {
         try{
+            Reservation cancelReservation = new Reservation();
+            int CancelResult = cancelReservation.cancelBooking(pnrNumber);
+            TransactionHandlerMessenger cancelTransactionResult = new TransactionHandler();
+            cancelTransactionResult.deleteTransaction(pnrNumber);
+            
             return this.handler.deleteFromTable(pnrNumber);
         }
         catch(Exception e){
@@ -53,6 +62,17 @@ public class ReservationHandler implements ReservationHandlerMessenger{
         
         return 0;
         
+    }
+     
+    private Transaction  paymentDetails(int pnrNumber, float amount){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("-----------------------------Payment Details-----------------------------");
+        System.out.println("Enter 16 digit card number");
+        String cardNumber = sc.next();
+        System.out.println("Enter Mobile Number");
+        String mobileNumber = sc.next();
+        Transaction transaction = new Transaction(cardNumber, mobileNumber, pnrNumber, amount);
+        return transaction;
     }
     private ArrayList<Integer> setSeats(int[] seats,Train train,ArrayList<Person> passengerList){
         int seatNo = 1;
@@ -111,6 +131,15 @@ public class ReservationHandler implements ReservationHandlerMessenger{
             e.printStackTrace();
         }
                 
+        
+        return 0;
+    }
+    private int writeTransactionValues(Transaction transactions){
+        try{
+            return this.handler.addToTransactionTable(transactions);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         
         return 0;
     }

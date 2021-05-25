@@ -26,11 +26,21 @@ public class Reservation {
      String destination;
      float fare;
      String cancelStatus = "No";
+     Transaction transaction ;
      public static HashMap<Integer, Reservation> listOfReservation = new HashMap<>();
      
      public Reservation(){
          
      }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
+     
 
     public Reservation(int noOfTickets,ArrayList<Person> passengers, ArrayList<Integer> seats, int trainnumber,String start, String destination,float fare, String date) {
         this.noOfTickets = noOfTickets;

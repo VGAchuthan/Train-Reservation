@@ -27,7 +27,7 @@ interface SQLOperationHandler{
 class WriteToTable implements Runnable{
     String tablename;
     HashMap<String, String> writeValues; 
-    Connection conn = DBConnection.getConnection();
+   // Connection conn = DBConnection.getConnection();
     Connection con = DBConnection.getConnection();
     
     
@@ -70,13 +70,14 @@ class WriteToTable implements Runnable{
         insertSql+=")";
         index =1;
         
-        PreparedStatement pstmt =  conn.prepareStatement(insertSql);
+        PreparedStatement pstmt =  con.prepareStatement(insertSql);
         for(String values : writeValues.values())
         {
             pstmt.setString(index, values);
             index++;
         }
         //rowid =
+        System.out.println(insertSql);
         pstmt.executeUpdate();
         }
         catch(Exception e){

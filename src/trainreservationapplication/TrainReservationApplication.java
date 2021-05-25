@@ -62,7 +62,7 @@ public class TrainReservationApplication {
                 int trainNumber = getTrainNumber();
                 Train train = TrainSchedule.getTrain(selectedDate, trainNumber);
                 System.out.println(train);
-                System.out.println("Selected Train"+trainNumber);
+                System.out.println("Available Seats"+train.availableSeats);
                 ArrayList<String> routes = getSourceAndDestionation(train); 
                 System.out.println("routees "+routes);
                 
@@ -70,34 +70,40 @@ public class TrainReservationApplication {
                 
                 System.out.println("Enter Number of Passengers");
                 int passengerCount = sc.nextInt();
-                for(int count = 1; count <=passengerCount;count++)
-                { //System.out.println("")
-                    System.out.println("Enter Name");
-                    String name = sc.next();
-                    System.out.println("Enter Age");
-                    int age = sc.nextInt();
-                    System.out.println("Enter Gender");
-                    String gender = sc.next();
-                    Person passenger = new Person(name, age, gender);
-                    listOfPassengers.add(passenger);
-                }
-                float fare = calculateFare(routes,train.stoppings) * passengerCount;
-                System.out.println("fare : "+fare);
-                int status = handler.bookTickets(selectedDate,train,listOfPassengers, routes, fare);
-                if(status == 1){
-                    System.out.println("Booked Successfully");
+                if(passengerCount <= train.availableSeats){
+                    for(int count = 1; count <=passengerCount;count++)
+                    { //System.out.println("")
+                        System.out.println("Enter Name");
+                        String name = sc.next();
+                        System.out.println("Enter Age");
+                        int age = sc.nextInt();
+                        System.out.println("Enter Gender");
+                        String gender = sc.next();
+                        Person passenger = new Person(name, age, gender);
+                        listOfPassengers.add(passenger);
+                    }
+                    float fare = calculateFare(routes,train.stoppings) * passengerCount;
+                    System.out.println("fare : "+fare);
+                    int status = handler.bookTickets(selectedDate,train,listOfPassengers, routes, fare);
+                    if(status == 1){
+                        System.out.println("Booked Successfully");
+                    }
+                    else{
+                        System.out.println("Booking Failed");
+                    }
+                    
                 }
                 else{
-                    System.out.println("Booking Failed");
+                    System.out.println("Tickets Not Available For All Passengers");
                 }
+                
                 
                 break;
             }
             case 2:{
                 System.out.println("Enter PNR number to Cancel Booking");
                 int pnrNumber = sc.nextInt();
-                Reservation cancelReservation = new Reservation();
-                int CancelResult = cancelReservation.cancelBooking(pnrNumber);
+                
                 int deleteStatus = handler.cancelTickets(pnrNumber);
                 if(deleteStatus != 0){
                     System.out.println("Cancel Successfully");
@@ -204,29 +210,14 @@ public class TrainReservationApplication {
         ArrayList<String> route = new ArrayList<String>();
         Scanner sc = new Scanner(System.in);
         int index=1;
-        //train.stoppings.subList(index, index)
-        /*for(String routes : train.stoppings){
-            System.out.println(index+". "+routes);
-            index++;
-            //routes.
-        }*/
+        
         System.out.println("Enter Starting Point");
-        String source = selectStation(train.stoppings);
+        String source = selectStation(train.stoppings.subList(0, train.stoppings.size() -1 ));
         System.out.println("Enter Destination Point");
         String destination = selectStation(train.stoppings.subList(train.stoppings.indexOf(source) + 1, train.stoppings.size()));
         route.add(source);
         route.add(destination);
-//        int from, destination;
-//        
-//        from = sc.nextInt();
-//        
-//        destination = sc.nextInt();
-//        if(from > destination){
-//            System.out.println("Select Valid Stations");
-//        }
-//        else{
-//            
-//        }
+
         
         return route;
         
