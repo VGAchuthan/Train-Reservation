@@ -109,10 +109,11 @@ public class SQLOperations implements SQLOperationHandler{
     @Override
     public ArrayList<HashMap<String, String>> fetchFromTable(String tablename,HashMap<String,String> whereValues, Connection con)throws Exception{
         Callable callable = new ReadFromTable(tablename, whereValues, con);
-        FutureTask writeTask = new FutureTask(callable);
-        Thread writeThread = new Thread(new WriteToTable(tablename, whereValues, con));
-        writeThread.start();
-        return null;
+        FutureTask fetchTask = new FutureTask(callable);
+        //ReadFromTable read = new ReadFromTable(tablename, whereValues, con);
+        Thread fetchThread = new Thread(fetchTask);
+        fetchThread.start();
+        return (ArrayList<HashMap<String, String>>) fetchTask.get();
     }
 
     @Override

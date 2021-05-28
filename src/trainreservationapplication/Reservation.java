@@ -14,32 +14,27 @@ import java.util.HashMap;
  * @author User
  */
 public class Reservation {
-     int tNum;
-     static int reserveId = 1;
+    private int tNum;
+     //static int reserveId = 1;
     //public String tName;
-     int PNRnumber;
-     int noOfTickets;
-     ArrayList<Person> passengers;
-     ArrayList<Integer> seats;
-     String date;
-     String start;
-     String destination;
-     float fare;
-     String cancelStatus = "No";
-     Transaction transaction ;
-     public static HashMap<Integer, Reservation> listOfReservation = new HashMap<>();
+    private int PNRnumber;
+    private int noOfTickets;
+    private ArrayList<Person> passengers;
+    private ArrayList<Integer> seats;
+    private String date;
+    private String start;
+    private String destination;
+    private float fare;
+    private String cancelStatus = "No";
+    private Transaction transaction ;
+    public static HashMap<Integer, Reservation> listOfReservation = new HashMap<>();
      
-     public Reservation(){
+    public Reservation(){
          
-     }
-
-    public Transaction getTransaction() {
-        return transaction;
     }
+     
 
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
-    }
+    
      
 
     public Reservation(int noOfTickets,ArrayList<Person> passengers, ArrayList<Integer> seats, int trainnumber,String start, String destination,float fare, String date) {
@@ -55,6 +50,98 @@ public class Reservation {
         //addToReservationList();
         Reservation.listOfReservation.put(this.PNRnumber,this);
     }
+
+    public int gettNum() {
+        return tNum;
+    }
+
+    public void settNum(int tNum) {
+        this.tNum = tNum;
+    }
+
+    public int getPNRnumber() {
+        return PNRnumber;
+    }
+
+    public void setPNRnumber(int PNRnumber) {
+        this.PNRnumber = PNRnumber;
+    }
+
+    public int getNoOfTickets() {
+        return noOfTickets;
+    }
+
+    public void setNoOfTickets(int noOfTickets) {
+        this.noOfTickets = noOfTickets;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public float getFare() {
+        return fare;
+    }
+
+    public void setFare(float fare) {
+        this.fare = fare;
+    }
+
+    public String getCancelStatus() {
+        return cancelStatus;
+    }
+
+    public void setCancelStatus(String cancelStatus) {
+        this.cancelStatus = cancelStatus;
+    }
+    
+    
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
+
+    public ArrayList<Person> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(ArrayList<Person> passengers) {
+        this.passengers = passengers;
+    }
+
+    public ArrayList<Integer> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(ArrayList<Integer> seats) {
+        this.seats = seats;
+    }
+    
+    
+    
 
     @Override
     public String toString() {
@@ -85,7 +172,7 @@ public class Reservation {
             train.seatToPassengerMap.remove(seat);
          });
             System.out.println("DElete afetr");
-            System.out.println(train.seats);
+            System.out.println(train.seats.toString());
             
             result = 1;
         }

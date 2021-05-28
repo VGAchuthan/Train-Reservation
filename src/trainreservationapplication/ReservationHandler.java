@@ -29,16 +29,16 @@ public class ReservationHandler implements ReservationHandlerMessenger{
         allocatedSeat = this.setSeats(train.seats,train,passengerList);
         System.out.println(allocatedSeat);
         Reservation reserve = new Reservation(passengerList.size(),passengerList, allocatedSeat, train.trainNumber,routes.get(0), routes.get(1),fare,date.toString());
-        Transaction transactions = paymentDetails(reserve.PNRnumber, reserve.fare);
+        Transaction transactions = paymentDetails(reserve.getPNRnumber(), reserve.getFare());
         reserve.setTransaction(transactions);
         //System.out.println(Reservation.reserveId);
         //System.out.println(reserve);
-        int p_result = writePassengerValues(reserve.tNum, reserve.PNRnumber,passengerList,allocatedSeat);
+        int p_result = writePassengerValues(reserve.gettNum(), reserve.getPNRnumber(),passengerList,allocatedSeat);
         //System.out.println("Pass res"+p_result);
-        int r_result = writeReservationValues(reserve.PNRnumber,reserve.tNum,passengerList.size(), routes, fare, date.toString());
+        int r_result = writeReservationValues(reserve.getPNRnumber(),reserve.gettNum(),passengerList.size(), routes, fare, date.toString());
         int t_result = writeTransactionValues(transactions);
         //handler.addToTransactionTable(transactions);
-        train.setAvailableSeats(train.getAvailableSeats() - passengerList.size());
+        //train.setAvailableSeats(train.getAvailableSeats() - passengerList.size());
         
         //System.out.println(train.availableSeats);
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -86,8 +86,9 @@ public class ReservationHandler implements ReservationHandlerMessenger{
                 for(int seat = 0;seat < 72;seat++)
                 if(seats[seat] == 0&&((seat % 8) == 0 || (seat % 8)== 5 || (seat % 8) == 7 ))
                 {
-                    seats[seat] =1;
+                    //seats[seat] =1;
                     allocatedSeat.add(seat);
+                    train.allocateSeats(train, seat);
                     train.seatToPassengerMap.put(seat,p);
                     break;
                 }
@@ -96,8 +97,9 @@ public class ReservationHandler implements ReservationHandlerMessenger{
             else{
                 for(int seat = 0;seat < 72;seat++)
                 if(seats[seat] == 0){
-                    seats[seat] = 1;
+                    //seats[seat] = 1;
                     allocatedSeat.add(seat);
+                    train.allocateSeats(train, seat);
                     train.seatToPassengerMap.put(seat,p);
                     break;
                 }

@@ -22,17 +22,32 @@ public class ReadFromTable implements Callable{
     String tablename;
     Connection con;
     ArrayList<HashMap<String, String>> result;
-   // HashMap<String , String> result;
+    HashMap<String , String> whereValues;
 
     public ReadFromTable(String tablename,HashMap<String,String> whereValues, Connection con) {
         this.tablename = tablename;
-        
+        this.whereValues = whereValues;
         this.con = con;
     }
 
     @Override
     public Object call() throws Exception {
-        String fetchSql = "SELECT * FROM "+this.tablename;
+        //System.out.println("IN call of thrad");
+        String fetchSql;
+        //whereValues.k
+        String whereClause = "";
+        for(HashMap.Entry entry : whereValues.entrySet()){
+            whereClause +=entry.getKey()+" = "+entry.getValue();
+        }
+        if(whereValues.isEmpty() ||whereValues == null)
+        {
+              fetchSql = "SELECT * FROM "+this.tablename;
+        }
+        else
+        {
+             fetchSql =  "SELECT * FROM "+this.tablename+" WHERE "+whereClause;
+        }
+        //System.out.println(fetchSql);
         Statement stmt = this.con.createStatement();
         ResultSet rs = stmt.executeQuery(fetchSql);
         ResultSetMetaData resultMetaData = rs.getMetaData();
@@ -54,6 +69,7 @@ public class ReadFromTable implements Callable{
             }
         resultMapArray.add(resultMap);
         }
+        //System.out.println(resultMapArray);
         this.result = resultMapArray;
          
 //        while(rs.next()){

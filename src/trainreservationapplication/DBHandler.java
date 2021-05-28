@@ -18,6 +18,10 @@ interface DBHandlerMessenger{
     int addToReservationTable(int pnrnumber, int trainnumber, int passengersSize, ArrayList<String> routes, float fare, String date);
     int deleteFromTable(int pnrNumber) throws Exception;
     int addToTransactionTable(Transaction transactions);
+    ArrayList<HashMap<String, String>> fetchFromReservationTable();
+    ArrayList<HashMap<String, String>> fetchFromPassengerTable(int pnr_number);
+    ArrayList<HashMap<String, String>> fetchFromTransactionTable(int pnr_number);
+    
     
 }
 public class DBHandler implements DBHandlerMessenger {
@@ -111,6 +115,47 @@ public class DBHandler implements DBHandlerMessenger {
         }
         return 0;
     
+    }
+
+    @Override
+    public ArrayList<HashMap<String, String>> fetchFromReservationTable() {
+        HashMap<String, String> whereValues = new HashMap<>();
+        try{
+            //System.out.println("IN FETCH FROM RESERVE TABLE IN DB HANDLER");
+            return this.sqlHandler.fetchFromTable("train.reservation", whereValues, con);
+        }
+        catch(Exception e){
+            e.printStackTrace();}
+        
+        return null;
+    }
+
+    @Override
+    public ArrayList<HashMap<String, String>> fetchFromPassengerTable(int pnr_number) {
+        HashMap<String, String> whereValues = new HashMap<>();
+        whereValues.put("pnr_number", Integer.toString(pnr_number));
+        try{
+            //System.out.println("IN FETCH FROM Passenger TABLE IN DB HANDLER");
+            return this.sqlHandler.fetchFromTable("train.passegers", whereValues, con);
+        }
+        catch(Exception e){
+            e.printStackTrace();}
+        
+        return null;
+    }
+
+    @Override
+    public ArrayList<HashMap<String, String>> fetchFromTransactionTable(int pnr_number) {
+        HashMap<String, String> whereValues = new HashMap<>();
+        whereValues.put("pnr_number", Integer.toString(pnr_number));
+        try{
+            //System.out.println("IN FETCH FROM transaction TABLE IN DB HANDLER");
+            return this.sqlHandler.fetchFromTable("train.transactions", whereValues, con);
+        }
+        catch(Exception e){
+            e.printStackTrace();}
+        
+        return null;
     }
     
     

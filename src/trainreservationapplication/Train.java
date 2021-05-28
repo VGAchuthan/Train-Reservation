@@ -20,7 +20,7 @@ class TrainSchedule{
         //Date date = new Date();
         //int today = date.getDate();
         LocalDate today = LocalDate.now();
-        
+        // System.out.println("int train schedule");
         for(int day = 0; day< 3;day++){
            // Long seconds = date.getTime()+(day*24*60*60*1000);
             //date.
@@ -29,13 +29,14 @@ class TrainSchedule{
             //Date tmr = new Date(seconds);
             //System.out.println(tmr);
             TrainSchedule.trainSchedule.put(tempDate, new TrainList().getTrainList());
-           // System.out.println(TrainSchedule.trainSchedule.get(tmr));
+           
         }
         //System.out.println(date.getDate());
         
         
     }
     public static Train getTrain(LocalDate date, int trainNumber){
+        //System.out.println(TrainSchedule.trainSchedule.get(date).get(trainNumber));
         return TrainSchedule.trainSchedule.get(date).get(trainNumber);
             
 
@@ -112,6 +113,11 @@ class Train {
 
     public void setSeats(int[] seats) {
         this.seats = seats;
+    }
+    
+    public void allocateSeats(Train train, int seat){
+        train.getSeats()[seat] = 1;
+        train.availableSeats-=1;
     }
     
     private ArrayList<String> getStoppings(int trainNumber){

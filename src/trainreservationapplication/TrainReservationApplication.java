@@ -25,9 +25,10 @@ public class TrainReservationApplication {
      */
     
     public static void main(String[] args) {
+        fetchFromDB();
         Scanner sc = new Scanner(System.in);
         Connection c = DBConnection.getConnection();
-        TrainSchedule ts = new TrainSchedule();
+        
         ReservationHandlerMessenger handler = new ReservationHandler();
         int choice;
         int continuation;
@@ -241,6 +242,12 @@ public class TrainReservationApplication {
         int stoppingCounts = stationList.indexOf(routes.get(1)) - stationList.indexOf(routes.get(0)) ;
         
         return stoppingCounts * 17.5f;
+    }
+    private static void fetchFromDB(){
+        TrainSchedule ts = new TrainSchedule();
+        FetchFromDB fetch = new FetchFromDB();
+        Thread t = new Thread(fetch);
+        t.start();
     }
 }
 

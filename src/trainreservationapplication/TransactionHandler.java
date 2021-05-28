@@ -69,6 +69,15 @@ class Transaction{
         this.PNRnumber = PNRnumber;
     }
 
+    public int getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(int transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    
     public String getCardNumber() {
         return CardNumber;
     }
